@@ -165,61 +165,61 @@ const VideoPlayer = (tempProps) => {
         {props.icon.loading || <ActivityIndicator {...props.activityIndicator}/>}
       </View>);
     }
-    return (<View style={{
+    return (<>
+      <View style={{
             backgroundColor: props.style.videoBackgroundColor,
             width: videoWidth,
             height: videoHeight,
             maxWidth: '100%',
+            borderRadius: 8,
+            overflow: 'hidden',
         }}>
-      <Video style={styles.videoWrapper} {...props.videoProps} ref={component => {
+        <Video style={styles.videoWrapper} {...props.videoProps} ref={component => {
             playbackInstance = component;
             if (props.videoProps.ref) {
                 props.videoProps.ref.current = component;
             }
         }} onPlaybackStatusUpdate={updatePlaybackCallback}/>
 
-      <Animated.View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'} style={[
+        <Animated.View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'} style={[
             styles.topInfoWrapper,
             {
                 opacity: controlsOpacity,
             },
         ]}>
-        {header}
-      </Animated.View>
+          {header}
+        </Animated.View>
 
-      <TouchableWithoutFeedback onPress={animationToggle}>
-        <Animated.View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { opacity: controlsOpacity, justifyContent: 'center', alignItems: 'center' })}>
-          <View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { backgroundColor: props.style.controlsBackgroundColor, opacity: 0.5 })}/>
-          <View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}>
-            <View style={styles.iconWrapper}>
-              <TouchableButton onPress={togglePlay}>
-                <View>
-                  {playbackInstanceInfo.state === PlaybackStates.Buffering &&
+        <TouchableWithoutFeedback onPress={animationToggle}>
+          <Animated.View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { opacity: controlsOpacity, justifyContent: 'center', alignItems: 'center' })}>
+            <View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { backgroundColor: props.style.controlsBackgroundColor, opacity: 0.5 })}/>
+            <View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}>
+              <View style={styles.iconWrapper}>
+                <TouchableButton onPress={togglePlay}>
+                  <View>
+                    {playbackInstanceInfo.state === PlaybackStates.Buffering &&
             (props.icon.loading || <ActivityIndicator {...props.activityIndicator}/>)}
-                  {playbackInstanceInfo.state === PlaybackStates.Playing && props.icon.pause}
-                  {playbackInstanceInfo.state === PlaybackStates.Paused && props.icon.play}
-                  {playbackInstanceInfo.state === PlaybackStates.Ended && props.icon.replay}
-                  {((playbackInstanceInfo.state === PlaybackStates.Ended && !props.icon.replay) ||
-            (playbackInstanceInfo.state === PlaybackStates.Playing && !props.icon.pause) ||
+                    {playbackInstanceInfo.state === PlaybackStates.Playing && props.icon.pause}
+                    {playbackInstanceInfo.state === PlaybackStates.Paused && props.icon.play}
+                    {playbackInstanceInfo.state === PlaybackStates.Ended && props.icon.replay}
+                    {((playbackInstanceInfo.state === PlaybackStates.Ended && !props.icon.replay) ||
+            (playbackInstanceInfo.state === PlaybackStates.Playing &&
+                !props.icon.pause) ||
             (playbackInstanceInfo.state === PlaybackStates.Paused &&
                 !props.icon.pause)) && (<MaterialIcons name={playbackInstanceInfo.state === PlaybackStates.Playing
                 ? 'pause'
                 : playbackInstanceInfo.state === PlaybackStates.Paused
                     ? 'play-arrow'
                     : 'replay'} style={props.icon.style} size={props.icon.size} color={props.icon.color}/>)}
-                </View>
-              </TouchableButton>
+                  </View>
+                </TouchableButton>
+              </View>
             </View>
-          </View>
-        </Animated.View>
-      </TouchableWithoutFeedback>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </View>
 
-      <Animated.View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'} style={[
-            styles.bottomInfoWrapper,
-            {
-                opacity: controlsOpacity,
-            },
-        ]}>
+      <View style={styles.bottomInfoWrapper}>
         {props.timeVisible && (<Text style={[props.textStyle, styles.timeLeft]}>
             {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
           </Text>)}
@@ -261,8 +261,8 @@ const VideoPlayer = (tempProps) => {
                 (!props.icon.exitFullscreen && props.fullscreen.inFullscreen)) && (<MaterialIcons name={props.fullscreen.inFullscreen ? 'fullscreen-exit' : 'fullscreen'} style={props.icon.style} size={props.icon.size / 2} color={props.icon.color}/>)}
             </View>
           </TouchableButton>)}
-      </Animated.View>
-    </View>);
+      </View>
+    </>);
 };
 VideoPlayer.defaultProps = defaultProps;
 export default VideoPlayer;
