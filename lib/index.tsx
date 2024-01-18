@@ -26,7 +26,6 @@ const VideoPlayer = (tempProps: Props) => {
 
   let playbackInstance: Video | null = null
   let controlsTimer: NodeJS.Timeout | null = null
-  let initialShow = props.defaultControlsVisible
   const header = props.header
 
   const [errorMessage, setErrorMessage] = useState('')
@@ -153,12 +152,8 @@ const VideoPlayer = (tempProps: Props) => {
             ? PlaybackStates.Playing
             : PlaybackStates.Paused,
       })
-      if (
-        (status.didJustFinish && controlsState === ControlStates.Hidden) ||
-        (status.isBuffering && controlsState === ControlStates.Hidden && initialShow)
-      ) {
+      if (status.didJustFinish && controlsState === ControlStates.Hidden) {
         animationToggle()
-        initialShow = false
       }
     } else {
       if (status.isLoaded === false && status.error) {

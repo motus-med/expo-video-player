@@ -12,7 +12,6 @@ const VideoPlayer = (tempProps) => {
     const props = deepMerge(defaultProps, tempProps);
     let playbackInstance = null;
     let controlsTimer = null;
-    let initialShow = props.defaultControlsVisible;
     const header = props.header;
     const [errorMessage, setErrorMessage] = useState('');
     const controlsOpacity = useRef(new Animated.Value(props.defaultControlsVisible ? 1 : 0)).current;
@@ -117,10 +116,8 @@ const VideoPlayer = (tempProps) => {
                         : status.shouldPlay
                             ? PlaybackStates.Playing
                             : PlaybackStates.Paused }));
-            if ((status.didJustFinish && controlsState === ControlStates.Hidden) ||
-                (status.isBuffering && controlsState === ControlStates.Hidden && initialShow)) {
+            if (status.didJustFinish && controlsState === ControlStates.Hidden) {
                 animationToggle();
-                initialShow = false;
             }
         }
         else {
