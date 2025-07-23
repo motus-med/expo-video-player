@@ -54,7 +54,7 @@ const VideoPlayer = (tempProps) => {
     }, [props.videoProps.source]);
     const hideAnimation = () => {
         Animated.timing(controlsOpacity, {
-            toValue: 0,
+            toValue: 0.05,
             duration: props.animation.fadeOutDuration,
             useNativeDriver: true,
         }).start(({ finished }) => {
@@ -189,8 +189,8 @@ const VideoPlayer = (tempProps) => {
 
         <TouchableWithoutFeedback onPress={animationToggle}>
           <Animated.View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { opacity: controlsOpacity, justifyContent: 'center', alignItems: 'center' })}>
-            <View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { backgroundColor: props.style.controlsBackgroundColor, opacity: 0.5 })}/>
-            <View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}>
+            <View style={Object.assign(Object.assign({}, StyleSheet.absoluteFillObject), { backgroundColor: props.style.controlsBackgroundColor, opacity: .5 })}/>
+            {controlsState === ControlStates.Visible && <View pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}>
               <View style={styles.iconWrapper}>
                 <TouchableButton onPress={togglePlay}>
                   <View>
@@ -211,7 +211,7 @@ const VideoPlayer = (tempProps) => {
                   </View>
                 </TouchableButton>
               </View>
-            </View>
+            </View>}
           </Animated.View>
         </TouchableWithoutFeedback>
       </View>
@@ -220,7 +220,7 @@ const VideoPlayer = (tempProps) => {
         {props.timeVisible && (<Text style={[props.textStyle, styles.timeLeft]}>
             {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
           </Text>)}
-        {props.slider.visible && (<Slider {...sliderProps} style={[styles.slider, props.slider.style]} value={playbackInstanceInfo.duration
+        {props.slider.visible && (<Slider {...sliderProps} style={[styles.slider, props.slider.style]} maximumValue={1} value={playbackInstanceInfo.duration
                 ? playbackInstanceInfo.position / playbackInstanceInfo.duration
                 : 0} onSlidingStart={() => {
                 if (playbackInstanceInfo.state === PlaybackStates.Playing) {
